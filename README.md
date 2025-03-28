@@ -17,14 +17,14 @@ Attention, the last parameter depends on your user, so it is important to copy t
 To execute the script on Windows, use the following command in PowerShell:
 
 ```powershell
-iex "& { $(iwr -UseBasicParsing https://raw.githubusercontent.com/MyTeslaMate/generate-fleet-tokens/refs/heads/main/tokens.ps1) } mycustomdomain"
+iex "& { $(iwr -UseBasicParsing https://raw.githubusercontent.com/MyTeslaMate/generate-fleet-tokens/refs/heads/main/tokens.ps1) } REPLACE_WITH_YOUR_CUSTOM_DOMAIN"
 ```
 
 ### Linux
 To run the script on Linux, use the following command in your terminal:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/MyTeslaMate/generate-fleet-tokens/refs/heads/main/tokens.sh | bash -s -- mycustomdomain
+curl -fsSL https://raw.githubusercontent.com/MyTeslaMate/generate-fleet-tokens/refs/heads/main/tokens.sh | bash -s -- REPLACE_WITH_YOUR_CUSTOM_DOMAIN
 ```
 
 
