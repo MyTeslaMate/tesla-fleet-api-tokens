@@ -1,10 +1,9 @@
 param (
     [string]$ApiDomain = "",
-    [string]$ApiID = ""
 )
 
-if ([string]::IsNullOrWhiteSpace($ApiDomain) -or [string]::IsNullOrWhiteSpace($ApiID)) {
-    Write-Host "Error: Both ApiDomain and ApiID parameters must be provided."
+if ([string]::IsNullOrWhiteSpace($ApiDomain)) {
+    Write-Host "Error: Both ApiDomain parameters must be provided."
     exit 1
 }
 
@@ -96,7 +95,7 @@ if ($json.error) {
 Write-Host "3 - Success! Click now on this link to log in and copy/paste the code needed to complete tokens generation:"
 Write-Host ""
 Write-Host ""
-Write-Host "https://auth.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2F$ApiID%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds&response_type=code&prompt=login&state=$clientId"
+Write-Host "https://auth.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds&response_type=code&prompt=login&state=$clientId"
 Write-Host ""
 
 $code = Read-Host -Prompt "Please paste the result code displayed " -AsSecureString
@@ -113,7 +112,7 @@ $arguments = @(
     "--data-urlencode", "client_secret=$clientSecret",
     "--data-urlencode", "code=$code",
     "--data-urlencode", "audience=https://fleet-api.prd.$REGION.vn.cloud.tesla.com",
-    "--data-urlencode", "redirect_uri=https://app.myteslamate.com/auth/tesla/$ApiID/callback",
+    "--data-urlencode", "redirect_uri=https://app.myteslamate.com/auth/tesla/user/callback",
     "https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/token"
 )
 

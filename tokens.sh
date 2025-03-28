@@ -2,11 +2,10 @@
 
 # Get input parameter
 API_DOMAIN="$1"
-API_ID="$2"
 
-if [ -z "$API_DOMAIN" ] || [ -z "$API_ID" ]; then
-    echo -e "\033[1;31mError: Both API_DOMAIN and API_ID parameters are required.\033[0m"
-    echo "Usage: $0 <API_DOMAIN> <API_ID>"
+if [ -z "$API_DOMAIN" ]; then
+    echo -e "\033[1;31mError: API_DOMAIN parameter is required.\033[0m"
+    echo "Usage: $0 <API_DOMAIN>"
     exit 1
 fi
 
@@ -67,7 +66,7 @@ fi
 
 echo -e "\033[1;34m3 - Last step, click now on this link to log in and copy/paste the code needed to complete tokens generation:\033[0m"
 echo ""
-echo -e "\033[1;32mhttps://auth.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2F$API_ID%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds&response_type=code&prompt=login&state=$clientId\033[0m"
+echo -e "\033[1;32mhttps://auth.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds&response_type=code&prompt=login&state=$clientId\033[0m"
 echo ""
 read -p "Please paste the code displayed on MyTeslamate after Tesla login: " code </dev/tty
 echo
@@ -79,7 +78,7 @@ response=$(curl -s -X POST \
     --data-urlencode "client_secret=$clientSecret" \
     --data-urlencode "code=$code" \
     --data-urlencode "audience=https://fleet-api.prd.$REGION.vn.cloud.tesla.com" \
-    --data-urlencode "redirect_uri=https://app.myteslamate.com/auth/tesla/$API_ID/callback" \
+    --data-urlencode "redirect_uri=https://app.myteslamate.com/auth/tesla/user/callback" \
     "https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/token")
 
 error=$(echo "$response" | grep "error")
