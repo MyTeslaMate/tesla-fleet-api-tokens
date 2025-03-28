@@ -20,7 +20,7 @@ To execute the script on Windows, use the following command in PowerShell:
 iex "& { $(iwr -UseBasicParsing https://raw.githubusercontent.com/MyTeslaMate/generate-fleet-tokens/refs/heads/main/tokens.ps1) } REPLACE_WITH_YOUR_CUSTOM_DOMAIN"
 ```
 
-### MacOs/Linux
+### MacOs or Linux
 To run the script on Linux, use the following command in your terminal:
 
 ```bash
