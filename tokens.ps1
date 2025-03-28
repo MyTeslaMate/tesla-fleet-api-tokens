@@ -1,5 +1,5 @@
 param (
-    [string]$ApiDomain = "",
+    [string]$ApiDomain = ""
 )
 
 if ([string]::IsNullOrWhiteSpace($ApiDomain)) {
