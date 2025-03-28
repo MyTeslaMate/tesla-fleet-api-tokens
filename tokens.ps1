@@ -132,5 +132,3 @@ $ACCESS_TOKEN = $json.access_token
 $REFRESH_TOKEN = $json.refresh_token
 Write-Host "Access token: $ACCESS_TOKEN"
 Write-Host "Refresh token: $REFRESH_TOKEN"
-Write-Host "Refresh token:"
-Write-Host "$json.refresh_token"
