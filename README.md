@@ -29,4 +29,4 @@ curl -fsSL https://raw.githubusercontent.com/MyTeslaMate/generate-fleet-tokens/r
 
 
 ## License
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
+This project is licensed under the MIT License. See the [`LICENSE`](LICENCE.md) file for more details.
