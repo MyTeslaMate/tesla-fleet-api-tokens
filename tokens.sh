@@ -41,7 +41,7 @@ response=$(curl --request POST -s \
     --data "{ \"domain\": \"app-$API_DOMAIN.myteslamate.com\" }" \
     "https://fleet-api.prd.na.vn.cloud.tesla.com/api/1/partner_accounts")
 
-error=$(echo "$response" | jq -r .error)
+error=$(echo "$response" | sed -n 's/.*"error":"\([^"]*\)".*/\1/p')
 
 if [ ! -z "$error" ] && [ "$error" != "null" ]; then
     echo -e "\033[1;31mError registering your NA application. Here is the error detail:\033[0m"
@@ -56,7 +56,7 @@ response=$(curl --request POST -s \
     --data "{ \"domain\": \"app-$API_DOMAIN.myteslamate.com\" }" \
     "https://fleet-api.prd.eu.vn.cloud.tesla.com/api/1/partner_accounts")
 
-error=$(echo "$response" | jq -r .error)
+error=$(echo "$response" | sed -n 's/.*"error":"\([^"]*\)".*/\1/p')
 
 if [ ! -z "$error" ] && [ "$error" != "null" ]; then
     echo -e "\033[1;31mError registering your EU application. Here is the error detail:\033[0m"
