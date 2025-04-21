@@ -6,15 +6,8 @@ if ([string]::IsNullOrWhiteSpace($ApiDomain)) {
     Write-Host "Error: Both ApiDomain parameters must be provided."
     exit 1
 }
-
-$clientId = Read-Host -Prompt "Please paste the client_id of your Tesla application" -AsSecureString
-$clientId = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(
-    [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($clientId)
-)
-$clientSecret = Read-Host -Prompt "Please paste the client_secret of your Tesla application" -AsSecureString
-$clientSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(
-    [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($clientSecret)
-)
+$clientId = Read-Host -Prompt "Please paste the client_id of your Tesla application"
+$clientSecret = Read-Host -Prompt "Please paste the client_secret of your Tesla application"
 
 $arguments = @(
     "--request", "POST",
