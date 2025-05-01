@@ -77,7 +77,6 @@ response=$(curl -s -X POST \
     --data-urlencode "client_id=$clientId" \
     --data-urlencode "client_secret=$clientSecret" \
     --data-urlencode "code=$code" \
-    --data-urlencode "audience=https://fleet-api.prd.$REGION.vn.cloud.tesla.com" \
     --data-urlencode "redirect_uri=https://app.myteslamate.com/auth/tesla/user/callback" \
     "https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/token")
 

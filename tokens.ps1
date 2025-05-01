@@ -1,14 +1,21 @@
 param (
-    [string]$ApiDomain = ""
+    [Parameter(Mandatory=$true)]
+    [string]$ApiDomain
 )
 
+# Validate domain
 if ([string]::IsNullOrWhiteSpace($ApiDomain)) {
-    Write-Host "Error: Both ApiDomain parameters must be provided."
+    Write-Host "Error: ApiDomain parameter must be provided."
     exit 1
 }
+
+# Get Tesla app credentials
 $clientId = Read-Host -Prompt "Please paste the client_id of your Tesla application"
 $clientSecret = Read-Host -Prompt "Please paste the client_secret of your Tesla application"
 
+Write-Host "1 - Creating new Tesla partner token..."
+
+# First token request for partner registration
 $arguments = @(
     "--request", "POST",
     "-s",
@@ -21,81 +28,77 @@ $arguments = @(
     "https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/token"
 )
 
-$output = & "curl.exe" @arguments 2>&1  # Redirect stderr to stdout
-Write-Host "1 - Create a new Tesla partner token..."
-
+$output = & "curl.exe" @arguments 2>&1
 if (-not $output) {
-    Write-Host "Error: empty response... The script seems to be blocked by Windows Try to run it in a PowerShell terminal: Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser"
+    Write-Host "Error: empty response. Please ensure curl.exe is available."
     exit 1
 }
 
 $json = $output | ConvertFrom-Json
 if (-not $json.access_token) {
-    Write-Host "Error, your access token is empty. Here is the error detail:"
+    Write-Host "Error getting access token. Details:"
     Write-Host "$output"
     exit 1
 }
 
 $ACCESS_TOKEN = $json.access_token
-$body = @{
+
+# Prepare the body with proper JSON escaping
+$bodyData = @{
     domain = "app-$ApiDomain.myteslamate.com"
-} | ConvertTo-Json
+}
+$bodyJson = $bodyData | ConvertTo-Json -Compress
 
-$bodyString = $body | Out-String
-
+# Register in NA region
+Write-Host "2 - Registering application in NA region..."
 $arguments = @(
     "--request", "POST",
     "-s",
     "--header", "Content-Type: application/json",
     "--header", "Authorization: Bearer $ACCESS_TOKEN",
-    "--data", $bodyString,
+    "--data", "`"$($bodyJson.Replace('"','\"'))`"",
     "https://fleet-api.prd.na.vn.cloud.tesla.com/api/1/partner_accounts"
 )
 
-$output = & "curl.exe" @arguments 2>&1  # Redirect stderr to stdout
-Write-Host "2 - Register your own Tesla application in NA region..."
-Write-Host "------------"
-Write-Host "$output"
+$output = & "curl.exe" @arguments 2>&1
+Write-Host "Response: $output"
 
 $json = $output | ConvertFrom-Json
 if ($json.error) {
-    Write-Host "Error registering your NA application. Here is the error detail:"
+    Write-Host "Error registering in NA region. Details:"
     Write-Host "$output"
     exit 1
 }
 
+# Register in EU region
+Write-Host "2 - Registering application in EU region..."
 $arguments = @(
     "--request", "POST",
     "-s",
     "--header", "Content-Type: application/json",
     "--header", "Authorization: Bearer $ACCESS_TOKEN",
-    "--data", $bodyString,
+    "--data", "`"$($bodyJson.Replace('"','\"'))`"",
     "https://fleet-api.prd.eu.vn.cloud.tesla.com/api/1/partner_accounts"
 )
 
-$output = & "curl.exe" @arguments 2>&1  # Redirect stderr to stdout
-Write-Host "2 - Register your own Tesla application in EU region..."
-Write-Host "------------"
-Write-Host "$output"
+$output = & "curl.exe" @arguments 2>&1
+Write-Host "Response: $output"
 
 $json = $output | ConvertFrom-Json
 if ($json.error) {
-    Write-Host "Error registering your EU application. Here is the error detail:"
+    Write-Host "Error registering in EU region. Details:"
     Write-Host "$output"
     exit 1
 }
 
-Write-Host "3 - Success! Click now on this link to log in and copy/paste the code needed to complete tokens generation:"
-Write-Host ""
-Write-Host ""
+# Generate auth URL
+Write-Host "`n3 - Please open this URL in your browser to authorize:"
 Write-Host "https://auth.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds&response_type=code&prompt=login&state=$clientId"
 Write-Host ""
 
-$code = Read-Host -Prompt "Please paste the result code displayed " -AsSecureString
-$code = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(
-    [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($code)
-)
+$code = Read-Host -Prompt "Please paste the authorization code from the URL"
 
+# Final token exchange
 $arguments = @(
     "--request", "POST",
     "-s",
@@ -104,24 +107,21 @@ $arguments = @(
     "--data-urlencode", "client_id=$clientId",
     "--data-urlencode", "client_secret=$clientSecret",
     "--data-urlencode", "code=$code",
-    "--data-urlencode", "audience=https://fleet-api.prd.$REGION.vn.cloud.tesla.com",
     "--data-urlencode", "redirect_uri=https://app.myteslamate.com/auth/tesla/user/callback",
     "https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/token"
 )
 
-$output = & "curl.exe" @arguments 2>&1  # Redirect stderr to stdout
-Write-Host "--------------------------------------------"
-Write-Host "4 - Your Tesla API access and secret tokens:"
+$output = & "curl.exe" @arguments 2>&1
+Write-Host "`n--------------------------------------------"
+Write-Host "4 - Your Tesla API tokens:"
 Write-Host "--------------------------------------------"
 
 $json = $output | ConvertFrom-Json
 if ($null -eq $json -or $json.error) {
-    Write-Host "Error generating token:"
+    Write-Host "Error generating final tokens:"
     Write-Host "$output"
     exit 1
 }
 
-$ACCESS_TOKEN = $json.access_token
-$REFRESH_TOKEN = $json.refresh_token
-Write-Host "Access token: $ACCESS_TOKEN"
-Write-Host "Refresh token: $REFRESH_TOKEN"
+Write-Host "Access token: $($json.access_token)"
+Write-Host "Refresh token: $($json.refresh_token)"
