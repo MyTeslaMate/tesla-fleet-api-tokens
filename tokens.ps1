@@ -93,7 +93,7 @@ if ($json.error) {
 
 # Generate auth URL
 Write-Host "`n3 - Please open this URL in your browser to authorize:"
-Write-Host "https://auth.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds+energy_device_data+energy_cmds&response_type=code&prompt=login&state=$clientId"
+Write-Host "https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds+energy_device_data+energy_cmds&response_type=code&prompt=login&state=$clientId"
 Write-Host ""
 
 $code = Read-Host -Prompt "Please paste the authorization code from the URL"
