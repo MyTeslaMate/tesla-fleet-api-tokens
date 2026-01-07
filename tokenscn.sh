@@ -51,7 +51,7 @@ fi
 
 echo -e "\033[1;34m3 - 最后一步，现在点击此链接登录并复制/粘贴完成令牌生成所需的代码：\033[0m"
 echo ""
-echo -e "\033[1;32mhttps://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds+energy_device_data+energy_cmds&response_type=code&prompt=login&state=$clientId\033[0m"
+echo -e "\033[1;32mhttps://auth.tesla.cn/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds+energy_device_data+energy_cmds&response_type=code&prompt=login&state=$clientId\033[0m"
 echo ""
 read -p "请粘贴特斯拉登录后 MyTeslamate 显示的代码：" code </dev/tty
 echo
