@@ -23,7 +23,7 @@ $arguments = @(
     "--data-urlencode", "grant_type=client_credentials",
     "--data-urlencode", "client_id=$clientId",
     "--data-urlencode", "client_secret=$clientSecret",
-    "--data-urlencode", "scope=openid vehicle_device_data vehicle_location vehicle_cmds vehicle_charging_cmds energy_device_data vehicle_specs energy_cmds",
+    "--data-urlencode", "scope=openid vehicle_device_data vehicle_location vehicle_cmds vehicle_charging_cmds energy_device_data energy_cmds",
     "--data-urlencode", "audience=https://fleet-api.prd.cn.vn.cloud.tesla.cn",
     "https://auth.tesla.cn/oauth2/v3/token"
 )
@@ -72,7 +72,7 @@ if ($json.error) {
 
 # Generate auth URL
 Write-Host "`n3 - 请在浏览器中打开此链接进行授权："
-Write-Host "https://auth.tesla.cn/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds+energy_device_data+vehicle_specs+energy_cmds&response_type=code&prompt=login&state=$clientId"
+Write-Host "https://auth.tesla.cn/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds+energy_device_data+energy_cmds&response_type=code&prompt=login&state=$clientId"
 Write-Host ""
 
 $code = Read-Host -Prompt "请粘贴特斯拉登录后 MyTeslamate 显示的授权代码"
