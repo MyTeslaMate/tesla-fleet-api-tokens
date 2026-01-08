@@ -21,7 +21,7 @@ response=$(curl --request POST -s \
     --data-urlencode "grant_type=client_credentials" \
     --data-urlencode "client_id=$clientId" \
     --data-urlencode "client_secret=$clientSecret" \
-    --data-urlencode "scope=openid vehicle_device_data vehicle_location vehicle_cmds vehicle_charging_cmds energy_device_data energy_cmds" \
+    --data-urlencode "scope=openid vehicle_device_data vehicle_location vehicle_cmds vehicle_charging_cmds energy_device_data vehicle_specs energy_cmds" \
     --data-urlencode "audience=https://fleet-api.prd.na.vn.cloud.tesla.com" \
     "https://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/token")
 
@@ -66,7 +66,7 @@ fi
 
 echo -e "\033[1;34m3 - Last step, click now on this link to log in and copy/paste the code needed to complete tokens generation:\033[0m"
 echo ""
-echo -e "\033[1;32mhttps://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds+energy_device_data+energy_cmds&response_type=code&prompt=login&state=$clientId\033[0m"
+echo -e "\033[1;32mhttps://fleet-auth.prd.vn.cloud.tesla.com/oauth2/v3/authorize?client_id=$clientId&redirect_uri=https%3A%2F%2Fapp.myteslamate.com%2Fauth%2Ftesla%2Fuser%2Fcallback&scope=openid+offline_access+user_data+vehicle_device_data+vehicle_location+vehicle_cmds+vehicle_charging_cmds+energy_device_data+vehicle_specs+energy_cmds&response_type=code&prompt=login&state=$clientId\033[0m"
 echo ""
 read -p "Please paste the code displayed on MyTeslamate after Tesla login: " code </dev/tty
 echo
